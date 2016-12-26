@@ -1,0 +1,9 @@
+# configuration files are stored in Scripts directory and copied from setup_repo.sh
+# thus we do not want to track them in git
+
+
+
+.overcommit.yml
+.idea/
+
+ScreepsAutocomplete/
