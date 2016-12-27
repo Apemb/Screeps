@@ -3,6 +3,9 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMiner = require('role.miner');
 
+require('extension.source');
+require('extension.room');
+
 module.exports.loop = function () {
 
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
@@ -11,13 +14,13 @@ module.exports.loop = function () {
     var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
 
     if(miners.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK,CARRY,CARRY, MOVE], undefined, {role: 'miner'});
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,CARRY,CARRY, MOVE], undefined, {role: 'miner'});
     } else if(harvesters.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([CARRY,MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], undefined, {role: 'harvester'});
+        var newName = Game.spawns['Spawn1'].createCreep([CARRY,MOVE], undefined, {role: 'harvester'});
     } else if(upgraders.length < 4) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, WORK,CARRY, MOVE, MOVE, MOVE], undefined, {role: 'upgrader'});
-    } else if(builders.length < 2) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, WORK,CARRY, MOVE, MOVE, MOVE], undefined, {role: 'builder'});
+        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE, MOVE], undefined, {role: 'upgrader'});
+    } else if(builders.length < 4) {
+        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE, MOVE], undefined, {role: 'builder'});
     }
 
     for(var name in Game.creeps) {
@@ -38,4 +41,7 @@ module.exports.loop = function () {
             delete Memory.creeps[name];
         }
     }
+
+    Game.spawns['Spawn1'].room.addSourcesToMemory();
+    console.log('CPU available in bucket: ' + Game.cpu.bucket);
 }
