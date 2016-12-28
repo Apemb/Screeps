@@ -2,15 +2,23 @@ var roleMiner = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if(creep.carry.energy < creep.carryCapacity) {
+
+        if(creep.memory.source) {
+            var sourceId = creep.memory.source;
+            var source = Game.getObjectById(sourceId);
+        } else {
             var sources = creep.room.find(FIND_SOURCES);
-            var closestSource = creep.pos.findClosestByPath(sources);
-            
-            creep.memory.sourceToMineId = closestSource.id;
-            closestSource.room.memory.sources[closestSource.id].miners[creep.name] = {};
-            closestSource.cleanMinerMemory();
-            if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(closestSource);
+            var source = creep.pos.findClosestByPath(sources);
+        }
+
+        if(!source.room.memory.sources[source.id]['miners'][creep.name]) {
+            console.log('Added ' + creep.name + ' to source ' + source.id);
+            source.room.memory.sources[source.id]['miners'][creep.name] = {};
+        }
+
+        if(creep.carry.energy < creep.carryCapacity) {
+            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source);
             }
         }
     }

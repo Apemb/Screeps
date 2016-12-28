@@ -12,3 +12,10 @@ if(!Room.prototype.addSourcesToMemory) {
         }
     }
 }
+
+if(!Room.prototype.memory) {
+
+    Room.prototype.memory = function () {
+        return Memory.rooms[this.name];
+    }
+}
