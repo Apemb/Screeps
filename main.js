@@ -32,7 +32,7 @@ module.exports.loop = function () {
         console.log('sourcesNeedingMiner: ' + sourcesNeedingMinerData);
         console.log('create miner with source : ' + sourcesNeedingMinerData[0].sourceId);
         
-        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK,CARRY,CARRY,MOVE], undefined, {
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE], undefined, {
             role: 'miner',
             source: sourcesNeedingMinerData[0].sourceId,
             container: sourcesNeedingMinerData[0].sourceClosestContainerId
@@ -43,11 +43,11 @@ module.exports.loop = function () {
     }
 
     if(harvesters.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([CARRY,MOVE, MOVE], undefined, {role: 'harvester'});
+        var newName = Game.spawns['Spawn1'].createCreep([CARRY,MOVE, MOVE, MOVE, MOVE], undefined, {role: 'harvester'});
     } else if(upgraders.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE, MOVE], undefined, {role: 'upgrader'});
+        roleUpgrader.createUpgrader('Spawn1');
     } else if(builders.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE, MOVE], undefined, {role: 'builder'});
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK, CARRY,CARRY, MOVE, MOVE, MOVE, MOVE], undefined, {role: 'builder'});
     }
 
     for(var name in Game.creeps) {
