@@ -11,8 +11,12 @@ if(!Source.prototype.cleanMinerMemory) {
 
 if(!Source.prototype.memory) {
 
-    Source.prototype.memory = function() {
-        console.log('source id: ' + this.id + 'has miners: ' + this.room.memory.sources[this.id].miners);
-        return this.room.memory.sources[this.id];
-    };
+    Object.defineProperty(Source.prototype, "memory",{
+        get: function() {
+            return this.room.memory.sources[this.id];
+        },
+        set: function(value) {
+            this.room.memory.sources[this.id] = value;
+        }
+    });
 }

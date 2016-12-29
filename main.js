@@ -12,17 +12,34 @@ module.exports.loop = function () {
 
     console.log('Tick n° ' + Game.time);
 
+    if(Game.time % 100 == 0) {
+        for (var roomName in Game.rooms) {
+            var room = Game.rooms[roomName];
+            room.updateSourcesCharacteristics();
+            console.log('Update Sources Characteristics for room: ' + roomName);
+        }
+    }
+
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
     var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
     var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
     var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
 
-    var sourcesNeedingMiner = roomAllocation.sourcesNeedingMiner(Game.spawns['Spawn1'].room);
-    console.log('sourcesNeedingMiner: ' + sourcesNeedingMiner);
+    var sourcesNeedingMinerData = roomAllocation.sourcesNeedingMiner(Game.spawns['Spawn1'].room);
 
-    if(sourcesNeedingMiner.length > 0) {
-        console.log('create miner with source : ' + sourcesNeedingMiner[0]);
-        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK,CARRY,CARRY,MOVE], undefined, {role: 'miner', source: sourcesNeedingMiner[0]});
+
+    if(sourcesNeedingMinerData.length > 0) {
+        console.log('sourcesNeedingMiner: ' + sourcesNeedingMinerData);
+        console.log('create miner with source : ' + sourcesNeedingMinerData[0].sourceId);
+        
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK,CARRY,CARRY,MOVE], undefined, {
+            role: 'miner',
+            source: sourcesNeedingMinerData[0].sourceId,
+            container: sourcesNeedingMinerData[0].sourceClosestContainerId
+        });
+        
+    } else {
+        console.log('sourcesNeedingMiner: ' + 'None');
     }
 
     if(harvesters.length < 3) {
@@ -52,12 +69,6 @@ module.exports.loop = function () {
         }
     }
 
-    if(Game.time % 100 == 0) {
-        for (var room in Game.rooms) {
-            room.addSourcesToMemory;
-            console.log('Did run addSourcesToMemory');
-        }
-    }
     console.log('CPU available in bucket: ' + Game.cpu.bucket);
     console.log();
 }

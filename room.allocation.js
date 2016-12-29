@@ -6,7 +6,7 @@ const MINER_PER_MINE = 1;
 var roomAllocation = {
     
     sourcesNeedingMiner: function(room) {
-        var sourcesNeedingMinerArray = [];
+        var sourcesNeedingMinerDataArray = [];
 
         for(var sourceId in room.memory.sources) {
 
@@ -20,10 +20,14 @@ var roomAllocation = {
             }
 
             if (Object.keys(miners).length < MINER_PER_MINE) {
-                sourcesNeedingMinerArray.push(sourceId);
+                var sourceData = {
+                    sourceId: sourceId,
+                    sourceClosestContainerId: room.memory.sources[sourceId].container
+                }
+                sourcesNeedingMinerDataArray.push(sourceData);
             }
         }
-        return sourcesNeedingMinerArray;
+        return sourcesNeedingMinerDataArray;
     }
 };
 
