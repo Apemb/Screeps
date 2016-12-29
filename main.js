@@ -42,12 +42,12 @@ module.exports.loop = function () {
         console.log('sourcesNeedingMiner: ' + 'None');
     }
 
-    if(harvesters.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([CARRY,MOVE, MOVE, MOVE, MOVE], undefined, {role: 'harvester'});
-    } else if(upgraders.length < 3) {
+    if(harvesters.length < 4) {
+        var newName = Game.spawns['Spawn1'].createCreep([CARRY,CARRY,CARRY,MOVE,MOVE,MOVE, MOVE, MOVE, MOVE], undefined, {role: 'harvester'});
+    } else if(upgraders.length < 2) {
         roleUpgrader.createUpgrader('Spawn1');
     } else if(builders.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK, CARRY,CARRY, MOVE, MOVE, MOVE, MOVE], undefined, {role: 'builder'});
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK, CARRY,CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], undefined, {role: 'builder'});
     }
 
     for(var name in Game.creeps) {

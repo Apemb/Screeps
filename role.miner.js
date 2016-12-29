@@ -20,6 +20,14 @@ var roleMiner = {
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source);
             }
+
+        } else {
+            if (creep.memory.container) {
+                var container = Game.getObjectById(creep.memory.container);
+                if(creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(container);
+                }
+            }
         }
     }
 };

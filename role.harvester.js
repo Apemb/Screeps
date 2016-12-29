@@ -6,41 +6,62 @@ var roleHarvester = {
     run: function(creep, miners) {
 
         if(creep.carry.energy < creep.carryCapacity) {
-            
-            var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
-            
-            creep.say(bestMiner.name);
-            if( bestMiner.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(bestMiner);
+
+            var sortedContainers = utilities.getSortedContainersForCreep(creep);
+
+            if(sortedContainers.length > 0) {
+                var bestContainer = sortedContainers[0];
+                var target = bestContainer;
+
+            } else {
+                var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
+                var target = bestMiner;
+            }
+
+
+            if(target.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target);
             }
         }
         else {
+            //TODO: Store target to not recalculate each turn
+
             var sourceTargets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
-                            structure.energy < structure.energyCapacity;
-                    }
-        })
-            var targets = sourceTargets;
-            if(sourceTargets.length == 0) {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                        structure.energy < structure.energyCapacity;
+                }
+            })
 
-                var storageTargets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (i) => (i.structureType == STRUCTURE_CONTAINER && _.sum(i.store) < i.storeCapacity)
-                });
+            if(sourceTargets.length > 0) {
 
-                targets = sourceTargets.concat(storageTargets);
-            }
-
-            if(targets.length > 0) {
-                
-                var closestTarget = creep.pos.findClosestByPath(targets);
+                var closestTarget = creep.pos.findClosestByPath(sourceTargets);
                 if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestTarget);
                 }
-            } else {
-                creep.moveTo(Game.spawns['Spawn1']);
-                
 
+            } else {
+
+                var sortedStorageTargets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (i) => (i.structureType == STRUCTURE_CONTAINER && _.sum(i.store) < i.storeCapacity)
+                }).sort(function(a, b) {
+
+                    sumA = _.sum(a.store);
+                    sumB = _.sum(b.store);
+
+                    return (sumA - sumB);
+                });
+
+                if (sortedStorageTargets.length > 0) {
+
+                    var lowestTarget = sortedStorageTargets[0];
+                    if(creep.transfer(lowestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(lowestTarget);
+                    }
+
+                } else {
+                    creep.moveTo(Game.spawns['Spawn1']);
+                }
             }
         }
     }
