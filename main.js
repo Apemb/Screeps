@@ -3,6 +3,8 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMiner = require('role.miner');
 
+var creepMiner = require('creep.miner');
+
 var roomAllocation = require('room.allocation');
 
 require('extension.source');
@@ -27,12 +29,12 @@ module.exports.loop = function () {
 
     var sourcesNeedingMinerData = roomAllocation.sourcesNeedingMiner(Game.spawns['Spawn1'].room);
 
-
     if(sourcesNeedingMinerData.length > 0) {
         console.log('sourcesNeedingMiner: ' + sourcesNeedingMinerData);
         console.log('create miner with source : ' + sourcesNeedingMinerData[0].sourceId);
-        
-        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE], undefined, {
+
+        var minerAttributes = creepMiner.attributeForEnergy(Game.spawns['Spawn1'].room.energyAvailable);
+        var newName = Game.spawns['Spawn1'].createCreep(minerAttributes, undefined, {
             role: 'miner',
             source: sourcesNeedingMinerData[0].sourceId,
             container: sourcesNeedingMinerData[0].sourceClosestContainerId
@@ -42,12 +44,12 @@ module.exports.loop = function () {
         console.log('sourcesNeedingMiner: ' + 'None');
     }
 
-    if(harvesters.length < 4) {
-        var newName = Game.spawns['Spawn1'].createCreep([CARRY,CARRY,CARRY,MOVE,MOVE,MOVE, MOVE, MOVE, MOVE], undefined, {role: 'harvester'});
+    if(harvesters.length < 3) {
+        var newName = Game.spawns['Spawn1'].createCreep([CARRY,CARRY,CARRY, MOVE, MOVE, MOVE, MOVE], undefined, {role: 'harvester'});
     } else if(upgraders.length < 2) {
         roleUpgrader.createUpgrader('Spawn1');
-    } else if(builders.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK, CARRY,CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], undefined, {role: 'builder'});
+    } else if(builders.length < 2) {
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,CARRY,CARRY, MOVE, MOVE, MOVE, MOVE], undefined, {role: 'builder'});
     }
 
     for(var name in Game.creeps) {
@@ -69,6 +71,7 @@ module.exports.loop = function () {
         }
     }
 
+    console.log('Capabilities of miner: ' + creepMiner.attributeForEnergy(300));
     console.log('CPU available in bucket: ' + Game.cpu.bucket);
     console.log();
 }

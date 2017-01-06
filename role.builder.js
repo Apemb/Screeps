@@ -53,8 +53,12 @@ var roleBuilder = {
         }
         else {
             var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
-            if( bestMiner.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(bestMiner);
+            if(bestMiner) {
+                if( bestMiner.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(bestMiner);
+                }
+            } else {
+                //TODO: Manage errors
             }
         }
     }

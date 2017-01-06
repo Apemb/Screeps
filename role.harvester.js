@@ -18,9 +18,12 @@ var roleHarvester = {
                 var target = bestMiner;
             }
 
-
-            if(target.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target);
+            if (!target) {
+                //TODO: Manage errors
+            } else {
+                if(target.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target);
+                }
             }
         }
         else {

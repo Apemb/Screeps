@@ -3,8 +3,8 @@ var utilities = require('utilities');
 var roleUpgrader = {
 
     createUpgrader: function(spawnName) {
-        
-        var upgraderCapacities = [WORK,WORK,WORK,WORK,WORK,CARRY, MOVE, MOVE];
+
+        var upgraderCapacities = [WORK,WORK,WORK,WORK,CARRY, MOVE, MOVE];
 
         var spawn = Game.spawns[spawnName];
         var controller = spawn.room.controller;
@@ -57,15 +57,23 @@ var roleUpgrader = {
                     creep.say('recalculating miner');
                     bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
 
-                    creep.memory.bestMinerId = bestMiner.id;
-                    creep.memory.lastBestMinerChoice = 0;
+                    if (bestMiner) {
+                        creep.memory.bestMinerId = bestMiner.id;
+                        creep.memory.lastBestMinerChoice = 0;
+                    } else {
+                        //TODO: Manage errors
+                    }
                 }
 
                 var target = bestMiner;
             }
 
-            if( target.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target);
+            if (target) {
+                if( target.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target);
+                }
+            } else {
+                //TODO: Manage errors
             }
             creep.memory.lastBestMinerChoice = creep.memory.lastBestMinerChoice + 1;
         }
