@@ -1,3 +1,15 @@
+// For test purposes
+
+if(typeof WORK === "undefined") {
+    WORK = "work";
+}
+if(typeof CARRY === "undefined") {
+    CARRY = "carry";
+}
+if(typeof MOVE === "undefined") {
+    MOVE = "move";
+}
+
 var creepMiner = {
 
     attributeForEnergy: function(energy) {
@@ -19,7 +31,7 @@ var creepMiner = {
         var minerAttributes = baseAttributes;
 
         while(availableSupplementaryAttributes > 0) {
-            minerAttributes.push(additionalAttributes);
+            minerAttributes = minerAttributes.concat(additionalAttributes);
             availableSupplementaryAttributes = availableSupplementaryAttributes - 1;
         }
         return minerAttributes;

@@ -34,7 +34,7 @@ module.exports.loop = function () {
         console.log('create miner with source : ' + sourcesNeedingMinerData[0].sourceId);
 
         var minerAttributes = creepMiner.attributeForEnergy(Game.spawns['Spawn1'].room.energyAvailable);
-        var newName = Game.spawns['Spawn1'].createCreep(minerAttributes, undefined, {
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE], undefined, {
             role: 'miner',
             source: sourcesNeedingMinerData[0].sourceId,
             container: sourcesNeedingMinerData[0].sourceClosestContainerId
