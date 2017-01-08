@@ -4,7 +4,7 @@ var roleUpgrader = {
 
     createUpgrader: function(spawnName) {
 
-        var upgraderCapacities = [WORK,WORK,WORK,WORK,CARRY, MOVE, MOVE];
+        var upgraderCapacities = [WORK,CARRY, MOVE];
 
         var spawn = Game.spawns[spawnName];
         var controller = spawn.room.controller;

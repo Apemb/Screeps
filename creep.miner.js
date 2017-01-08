@@ -1,16 +1,9 @@
-// For test purposes
-
-if(typeof WORK === "undefined") {
-    WORK = "work";
-}
-if(typeof CARRY === "undefined") {
-    CARRY = "carry";
-}
-if(typeof MOVE === "undefined") {
-    MOVE = "move";
-}
-
 var creepMiner = {
+
+    prepareForTest: function () {
+        var specUtilities = require('./spec/helpers/spec.utilities');
+        specUtilities.loadScreepsAPI();
+    },
 
     attributeForEnergy: function(energy) {
 
