@@ -1,12 +1,12 @@
 var utilities = require('utilities');
+var creepUpgrader = require('creep.upgrader');
 
 var roleUpgrader = {
 
     createUpgrader: function(spawnName) {
-
-        var upgraderCapacities = [WORK,CARRY, MOVE];
-
         var spawn = Game.spawns[spawnName];
+
+        var upgraderCapacities = creepUpgrader.attributeForEnergy(spawn.room.energyAvailable);
         var controller = spawn.room.controller;
 
         var containers = spawn.room.find(FIND_STRUCTURES, {

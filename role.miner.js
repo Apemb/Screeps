@@ -2,7 +2,7 @@ var roleMiner = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-
+        
         if(creep.memory.source) {
             var sourceId = creep.memory.source;
             var source = Game.getObjectById(sourceId);
