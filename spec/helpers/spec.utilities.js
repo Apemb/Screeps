@@ -1,15 +1,18 @@
 var specUtilities = {
 
-    loadScreepsAPI: function () {
-        if (typeof WORK === "undefined") {
-            WORK = "work";
-        }
-        if (typeof CARRY === "undefined") {
-            CARRY = "carry";
-        }
-        if (typeof MOVE === "undefined") {
-            MOVE = "move";
-        }
+    loadScreepsAPI: function ()
+    {
+        require('../../ScreepsAutocomplete/Structures/StructureSpawn');
+
+        require('../../ScreepsAutocomplete/Room');
+        Room = function() { };
+
+        require('../../ScreepsAutocomplete/Creep');
+
+        require('../../ScreepsAutocomplete/Memory');
+
+        require('../../screepsAPI/screeps.api.constants');
+        require('../../screepsAPI/screeps.api.source');
     }
 };
 

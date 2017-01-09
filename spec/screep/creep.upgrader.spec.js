@@ -1,12 +1,14 @@
+require('../../screepsAPI/screeps.api.constants');
+
 describe("creepUpgrader", function() {
     var creepUpgrader = require('../../creep.upgrader');
+
     var specUtilities = require('../helpers/spec.utilities');
 
     beforeEach(function() {
         creepUpgrader.prepareForTest();
         specUtilities.loadScreepsAPI();
     });
-
     describe("calculus of upgrader attributes depending on available energy", function() {
 
         it("return at least the base arguments even if energy  equal 0", function() {

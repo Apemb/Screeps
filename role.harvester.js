@@ -5,10 +5,27 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep, miners) {
 
-        if(creep.carry.energy < creep.carryCapacity) {
+        var creepMinimalWorkingCapacity = Math.min(
+            creep.carryCapacity,
+            150
+        );
+
+        function transferEnergyFromCreepToTargetOrMoveToIt (creep, target) {
+            var errorFromTransfer = target.transfer(creep, RESOURCE_ENERGY);
+
+            if(errorFromTransfer == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target);
+                return 0
+
+            } else {
+                return errorFromTransfer
+            }
+        };
+
+        if(creep.carry.energy < creepMinimalWorkingCapacity) {
 
             var sortedContainers = utilities.getSortedContainersForCreep(creep);
-
+            
             if(sortedContainers.length > 0) {
                 var bestContainer = sortedContainers[0];
                 var target = bestContainer;
@@ -21,8 +38,11 @@ var roleHarvester = {
             if (!target) {
                 //TODO: Manage errors
             } else {
-                if(target.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target);
+                var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,target);
+
+                if (errorFromTransfer == ERR_NOT_ENOUGH_ENERGY) {
+                    var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
+                    var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,bestMiner);
                 }
             }
         }
@@ -31,8 +51,13 @@ var roleHarvester = {
 
             var sourceTargets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
-                        structure.energy < structure.energyCapacity;
+                    return (
+                        (structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN) &&
+                        structure.energy < structure.energyCapacity) ||
+                        (structure.structureType == STRUCTURE_TOWER &&
+                        structure.energy < structure.energyCapacity/2)
+                        ;
                 }
             })
 

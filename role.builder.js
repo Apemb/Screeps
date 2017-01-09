@@ -5,12 +5,29 @@ var roleBuilder = {
     /** @param {Creep} creep **/
     run: function(creep, miners) {
 
+        var creepMinimalWorkingCapacity = Math.min(
+            creep.carryCapacity,
+            150
+        );
+
+        function transferEnergyFromCreepToTargetOrMoveToIt (creep, target) {
+            var errorFromTransfer = target.transfer(creep, RESOURCE_ENERGY);
+
+            if(errorFromTransfer == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target);
+                return 0
+
+            } else {
+                return errorFromTransfer
+            }
+        };
+
         if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
             creep.memory.buildingTargetId = 'None';
 
         }
-        if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
+        if(!creep.memory.building && creep.carry.energy >= creepMinimalWorkingCapacity) {
             creep.memory.building = true;
         }
 
@@ -30,7 +47,13 @@ var roleBuilder = {
 
                 if(targets.length) {
                     var closestTarget = creep.pos.findClosestByPath(targets);
-                    creep.memory.buildingTargetId = closestTarget.id;
+
+                    if(closestTarget) {
+                        creep.memory.buildingTargetId = closestTarget.id;
+                    }
+                    else {
+                        //TODO: Manage errors
+                    }
                 } else {
                     creep.memory.buildingTargetId = 'None';
                 }
@@ -52,13 +75,26 @@ var roleBuilder = {
             }
         }
         else {
-            var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
-            if(bestMiner) {
-                if( bestMiner.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(bestMiner);
-                }
+            var sortedContainers = utilities.getSortedContainersForCreep(creep);
+
+            if(sortedContainers.length > 0) {
+                var bestContainer = sortedContainers[0];
+                var target = bestContainer;
+
             } else {
+                var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
+                var target = bestMiner;
+            }
+
+            if (!target) {
                 //TODO: Manage errors
+            } else {
+                var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,target);
+
+                if (errorFromTransfer == ERR_NOT_ENOUGH_ENERGY) {
+                    var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
+                    var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,bestMiner);
+                }
             }
         }
     }

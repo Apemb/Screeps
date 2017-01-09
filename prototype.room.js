@@ -1,3 +1,10 @@
+if (Global.Test) {
+    (function() {
+        var specUtilities = require('./spec/helpers/spec.utilities');
+        specUtilities.loadScreepsAPI();
+    })();
+}
+
 if(!Room.prototype.updateSourcesCharacteristics) {
 
     Room.prototype.updateSourcesCharacteristics = function() {

@@ -1,9 +1,14 @@
-require('extension.source');
-require('extension.room');
+require('./prototype.source');
+require('./prototype.room');
 
 const MINER_PER_MINE = 1;
 
 var roomAllocation = {
+
+    prepareForTest: function () {
+        var specUtilities = require('./spec/helpers/spec.utilities');
+        specUtilities.loadScreepsAPI();
+    },
     
     sourcesNeedingMiner: function(room) {
         var sourcesNeedingMinerDataArray = [];

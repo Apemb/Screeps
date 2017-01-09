@@ -1,3 +1,6 @@
+Global = {};
+Global.Test = false;
+
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
@@ -9,8 +12,10 @@ var creepBuilder = require('creep.builder');
 
 var roomAllocation = require('room.allocation');
 
-require('extension.source');
-require('extension.room');
+require('prototype.source');
+require('prototype.room');
+
+require('prototype.tower')();
 
 module.exports.loop = function () {
 
@@ -40,12 +45,12 @@ module.exports.loop = function () {
             source: sourcesNeedingMinerData[0].sourceId,
             container: sourcesNeedingMinerData[0].sourceClosestContainerId
         });
-        
+
     } else {
         console.log('sourcesNeedingMiner: ' + 'None');
     }
 
-    if(harvesters.length < 3) {
+    if(harvesters.length < 2) {
         var harvesterAttributes = creepHarvester.attributeForEnergy(Game.spawns['Spawn1'].room.energyAvailable);
         var newName = Game.spawns['Spawn1'].createCreep(harvesterAttributes, undefined, {role: 'harvester'});
 
@@ -63,11 +68,16 @@ module.exports.loop = function () {
             roleHarvester.run(creep, miners);
         } else if(creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep, miners);
-    } else if(creep.memory.role == 'builder') {
+        } else if(creep.memory.role == 'builder') {
             roleBuilder.run(creep, miners);
         } else if(creep.memory.role == 'miner') {
             roleMiner.run(creep);
         }
+    }
+
+    var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
+    for (let tower of towers) {
+        tower.spendEnergy();
     }
 
     for(var name in Memory.creeps) {
@@ -76,7 +86,7 @@ module.exports.loop = function () {
         }
     }
 
-    console.log('Capabilities of miner: ' + creepMiner.attributeForEnergy(300));
+    console.log('Game constant: ' + Game.work);
     console.log('CPU available in bucket: ' + Game.cpu.bucket);
     console.log();
 }
