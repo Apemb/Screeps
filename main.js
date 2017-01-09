@@ -1,5 +1,6 @@
 Global = {};
 Global.Test = false;
+Global.Log = true;
 
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
@@ -12,20 +13,21 @@ var creepBuilder = require('creep.builder');
 
 var roomAllocation = require('room.allocation');
 
+require("utilities.prototype.logger");
 require('prototype.source');
+require('prototype.spawn');
 require('prototype.room');
-
 require('prototype.tower')();
 
 module.exports.loop = function () {
 
-    console.log('Tick n° ' + Game.time);
+    logger.log('Tick n° ' + Game.time);
 
     if(Game.time % 100 == 0) {
         for (var roomName in Game.rooms) {
             var room = Game.rooms[roomName];
             room.updateSourcesCharacteristics();
-            console.log('Update Sources Characteristics for room: ' + roomName);
+            logger.log('Update Sources Characteristics for room: ' + roomName);
         }
     }
 
@@ -38,16 +40,10 @@ module.exports.loop = function () {
 
     if(sourcesNeedingMinerData.length > 0) {
         console.log('create miner with source : ' + sourcesNeedingMinerData[0].sourceId);
-
-        var minerAttributes = creepMiner.attributeForEnergy(Game.spawns['Spawn1'].room.energyAvailable);
-        var newName = Game.spawns['Spawn1'].createCreep(minerAttributes, undefined, {
-            role: 'miner',
-            source: sourcesNeedingMinerData[0].sourceId,
-            container: sourcesNeedingMinerData[0].sourceClosestContainerId
-        });
+        Game.spawns['Spawn1'].createMiner(sourcesNeedingMinerData[0]);
 
     } else {
-        console.log('sourcesNeedingMiner: ' + 'None');
+        logger.log('sourcesNeedingMiner: ' + 'None');
     }
 
     if(harvesters.length < 2) {
@@ -86,7 +82,7 @@ module.exports.loop = function () {
         }
     }
 
-    console.log('Game constant: ' + Game.work);
-    console.log('CPU available in bucket: ' + Game.cpu.bucket);
-    console.log();
+    logger.log('Game constant: ' + Game.work);
+    logger.log('CPU available in bucket: ' + Game.cpu.bucket);
+    logger.log();
 }

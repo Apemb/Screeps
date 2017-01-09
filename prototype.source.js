@@ -13,12 +13,13 @@ Source.prototype.cleanMinerMemory = function () {
     }
 };
 
-Object.defineProperty(Source.prototype, "memory",{
-    get: function() {
-        return this.room.memory.sources[this.id];
-    },
-    set: function(value) {
-        this.room.memory.sources[this.id] = value;
-    }
-});
-
+if(!Source.prototype.memory) {
+    Object.defineProperty(Source.prototype, "memory", {
+        get: function () {
+            return this.room.memory.sources[this.id];
+        },
+        set: function (value) {
+            this.room.memory.sources[this.id] = value;
+        }
+    });
+}

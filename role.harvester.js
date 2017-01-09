@@ -24,25 +24,39 @@ var roleHarvester = {
 
         if(creep.carry.energy < creepMinimalWorkingCapacity) {
 
-            var sortedContainers = utilities.getSortedContainersForCreep(creep);
-            
-            if(sortedContainers.length > 0) {
-                var bestContainer = sortedContainers[0];
-                var target = bestContainer;
+            var droppedEnergy = creep.room.find(FIND_DROPPED_ENERGY, {
+                filter: (i) => (i.energy > 100)
+            });
+
+            if (droppedEnergy.length > 0) {
+                var errorFromTransfer = creep.pickup(droppedEnergy[0]);
+
+                if(errorFromTransfer == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(droppedEnergy[0].pos);
+                }
 
             } else {
-                var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
-                var target = bestMiner;
-            }
 
-            if (!target) {
-                //TODO: Manage errors
-            } else {
-                var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,target);
+                var sortedContainers = utilities.getSortedContainersForCreep(creep);
 
-                if (errorFromTransfer == ERR_NOT_ENOUGH_ENERGY) {
+                if(sortedContainers.length > 0) {
+                    var bestContainer = sortedContainers[0];
+                    var target = bestContainer;
+
+                } else {
                     var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
-                    var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,bestMiner);
+                    var target = bestMiner;
+                }
+
+                if (!target) {
+                    //TODO: Manage errors
+                } else {
+                    var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,target);
+
+                    if (errorFromTransfer == ERR_NOT_ENOUGH_ENERGY) {
+                        var bestMiner = utilities.sortBestMinerForCreep(miners, creep)[0];
+                        var errorFromTransfer = transferEnergyFromCreepToTargetOrMoveToIt(creep,bestMiner);
+                    }
                 }
             }
         }

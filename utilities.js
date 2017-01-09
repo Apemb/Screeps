@@ -6,6 +6,8 @@ var utilities = {
             filter: (i) => (i.structureType == STRUCTURE_CONTAINER)
         });
 
+        containers = containers;
+
         return containers.sort(function (a, b) {
             var pathToA = creep.pos.findPathTo(a);
             var pathToB = creep.pos.findPathTo(b);
