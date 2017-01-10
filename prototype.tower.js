@@ -2,7 +2,7 @@ module.exports = function() {
 
     StructureTower.prototype.spendEnergy = function () {
 
-        let enemyTarget = this.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        let enemyTarget = this.pos.findClosestByRange(this.room.hostiles);
         if (enemyTarget != undefined) {
             this.attack(enemyTarget);
         }

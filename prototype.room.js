@@ -5,6 +5,8 @@ if (Global.Test) {
     })();
 }
 
+ALLIED_PLAYERS = ['Goldnose'];
+
 if(!Room.prototype.updateSourcesCharacteristics) {
 
     Room.prototype.updateSourcesCharacteristics = function() {
@@ -49,6 +51,22 @@ if(!Room.prototype.memory) {
         },
         set: function(value) {
             return Memory.rooms[this.name] = value;
+        }
+    });
+}
+
+if(!Room.prototype.hostiles)
+{
+    Object.defineProperty(Room.prototype, "hostiles",{
+        get:  function () {
+            if (_.isUndefined(this._hostiles)) {
+                let notAllied = (creep) =>
+                    !(ALLIED_PLAYERS.some((player) =>
+                        player.toLowerCase() == creep.owner.username.toLowerCase()
+                    ));
+                this._hostiles = this.find(FIND_HOSTILE_CREEPS, {filter: notAllied});
+            }
+            return this._hostiles;
         }
     });
 }

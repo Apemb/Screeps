@@ -7,7 +7,6 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMiner = require('role.miner');
 
-var creepMiner = require('creep.miner');
 var creepHarvester = require('creep.harvester');
 var creepBuilder = require('creep.builder');
 
