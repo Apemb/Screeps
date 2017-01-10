@@ -1,4 +1,5 @@
 var utilities = require('utilities');
+require('utilities.prototype.logger');
 
 var roleHarvester = {
 
@@ -85,7 +86,7 @@ var roleHarvester = {
             } else {
 
                 var sortedStorageTargets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (i) => (i.structureType == STRUCTURE_CONTAINER && _.sum(i.store) < i.storeCapacity)
+                    filter: (i) => (i.structureType == STRUCTURE_CONTAINER && _.sum(i.store) < i.storeCapacity * 0.70)
                 }).sort(function(a, b) {
 
                     sumA = _.sum(a.store);
@@ -102,7 +103,19 @@ var roleHarvester = {
                     }
 
                 } else {
-                    creep.moveTo(Game.spawns['Spawn1']);
+                    var storageTargets = creep.room.find(FIND_STRUCTURES, {
+                        filter: (i) => (i.structureType == STRUCTURE_STORAGE && _.sum(i.store) < i.storeCapacity * 0.50)
+                    });
+
+                    if (storageTargets.length > 0) {
+                        var storage = storageTargets[0];
+                        if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(storage);
+                        }
+
+                    } else {
+                        creep.moveTo(Game.spawns['Spawn1']);
+                    }
                 }
             }
         }
