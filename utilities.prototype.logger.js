@@ -9,3 +9,13 @@ logger.log = function (message) {
         }
     }
 };
+
+logger.debugLog = function (message) {
+    if (Global.DebugLog) {
+        if (typeof message === "undefined") {
+            console.log();
+        } else {
+            console.log(" >> " + message);
+        }
+    }
+};

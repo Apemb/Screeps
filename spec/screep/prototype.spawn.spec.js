@@ -1,6 +1,7 @@
 Global = {};
 Global.Test = true;
 Global.Log = false;
+Global.DebugLog = false;
 
 describe("spawn", function() {
     var specUtilities = require('../helpers/spec.utilities');
@@ -24,8 +25,7 @@ describe("spawn", function() {
     });
 
     describe("createMiner", function() {
-
-        it("return at least the base arguments even if energy  equal 0", function() {
+        it("should create the miner with the right attributes", function() {
             // Arrange
             var minerData = {};
             minerData.sourceId = "1234";
@@ -54,6 +54,60 @@ describe("spawn", function() {
                 role: 'miner',
                 source: minerData.sourceId,
                 container: minerData.sourceClosestContainerId
+            });
+        });
+    });
+    describe("createHarvester", function() {
+        it("should create the harvester with the right attributes", function() {
+            // Arrange
+            var spawn = new Spawn();
+            spawn.room = roomMock;
+
+            var receivedAttributes = [];
+            var receivedName = "";
+            var receivedMemory = {};
+
+            spawn.createCreep = function (creepAttributes, creepName, creepMemory) {
+                receivedAttributes = creepAttributes;
+                receivedName = creepName;
+                receivedMemory = creepMemory;
+            };
+
+            // Act
+            spawn.createHarvester();
+
+            // Assert
+            expect(receivedAttributes).toEqual([CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE]);
+            expect(receivedName).toBeUndefined();
+            expect(receivedMemory).toEqual({
+                role: 'harvester'
+            });
+        });
+    });
+    describe("createBuilder", function() {
+        it("should create the builder with the right attributes", function() {
+            // Arrange
+            var spawn = new Spawn();
+            spawn.room = roomMock;
+
+            var receivedAttributes = [];
+            var receivedName = "";
+            var receivedMemory = {};
+
+            spawn.createCreep = function (creepAttributes, creepName, creepMemory) {
+                receivedAttributes = creepAttributes;
+                receivedName = creepName;
+                receivedMemory = creepMemory;
+            };
+
+            // Act
+            spawn.createBuilder();
+
+            // Assert
+            expect(receivedAttributes).toEqual([WORK,CARRY,MOVE,WORK,CARRY,MOVE]);
+            expect(receivedName).toBeUndefined();
+            expect(receivedMemory).toEqual({
+                role: 'builder'
             });
         });
     });
