@@ -44,7 +44,6 @@ if(!Room.prototype.updateSourcesCharacteristics) {
 }
 
 if(!Room.prototype.memory) {
-
     Object.defineProperty(Room.prototype, "memory",{
         get: function() {
             return Memory.rooms[this.name];
@@ -55,8 +54,7 @@ if(!Room.prototype.memory) {
     });
 }
 
-if(!Room.prototype.hostiles)
-{
+if(!Room.prototype.hostiles) {
     Object.defineProperty(Room.prototype, "hostiles",{
         get:  function () {
             if (_.isUndefined(this._hostiles)) {
@@ -67,6 +65,38 @@ if(!Room.prototype.hostiles)
                 this._hostiles = this.find(FIND_HOSTILE_CREEPS, {filter: notAllied});
             }
             return this._hostiles;
+        }
+    });
+}
+
+if(!Room.prototype.hostileTowers) {
+    Object.defineProperty(Room.prototype, "hostileTowers",{
+        get:  function () {
+            if (_.isUndefined(this._hostileTowers)) {
+                let notAlliedTowers = (structure) =>
+                    !(ALLIED_PLAYERS.some((player) =>
+                        player.toLowerCase() == structure.owner.username.toLowerCase() &&
+                        structure.structureType == STRUCTURE_TOWER
+                    ));
+                this._hostileTowers = this.find(FIND_HOSTILE_STRUCTURES, {filter: notAlliedTowers});
+            }
+            return this._hostileTowers;
+        }
+    });
+}
+
+
+if(!Room.prototype.hostileStructures) {
+    Object.defineProperty(Room.prototype, "hostileStructures",{
+        get:  function () {
+            if (_.isUndefined(this._hostileStructures)) {
+                let notAlliedStructures = (structure) =>
+                    !(ALLIED_PLAYERS.some((player) =>
+                        player.toLowerCase() == structure.owner.username.toLowerCase()
+                    ));
+                this._hostileStructures = this.find(FIND_HOSTILE_STRUCTURES, {filter: notAlliedStructures});
+            }
+            return this._hostileStructures;
         }
     });
 }

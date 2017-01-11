@@ -111,4 +111,31 @@ describe("spawn", function() {
             });
         });
     });
+    describe("createSolider", function() {
+        it("should create the soldier with the right attributes", function() {
+            // Arrange
+            var spawn = new Spawn();
+            spawn.room = roomMock;
+
+            var receivedAttributes = [];
+            var receivedName = "";
+            var receivedMemory = {};
+
+            spawn.createCreep = function (creepAttributes, creepName, creepMemory) {
+                receivedAttributes = creepAttributes;
+                receivedName = creepName;
+                receivedMemory = creepMemory;
+            };
+
+            // Act
+            spawn.createSoldier();
+
+            // Assert
+            // expect(receivedAttributes).toEqual([ATTACK,TOUGH,MOVE,MOVE]);
+            expect(receivedName).toBeUndefined();
+            expect(receivedMemory).toEqual({
+                role: 'soldier'
+            });
+        });
+    });
 });

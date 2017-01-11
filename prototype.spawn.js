@@ -14,7 +14,7 @@ var creepBuilder = require("./creep.builder");
 StructureSpawn.prototype.createMiner = function(minerData) {
 
     if(minerData) {
-        logger.log(this.room.name + ' is needs miner with source : ' + minerData.sourceId);
+        logger.log('Room: ' + this.room.name + ' needs miner with source : ' + minerData.sourceId);
 
         var minerAttributes = creepMiner.attributeForEnergy(this.room.energyAvailable);
         this.createCreep(minerAttributes, undefined, {
@@ -23,13 +23,13 @@ StructureSpawn.prototype.createMiner = function(minerData) {
             container: minerData.sourceClosestContainerId
         });
     } else {
-        logger.debugLog(this.room.name + ' is needs miner but data source failed');
+        logger.debugLog('Room: ' + this.room.name + ' needs miner but data source failed');
     }
 };
 
 StructureSpawn.prototype.createHarvester = function() {
 
-    logger.log(this.room.name + ' is needs harvester');
+    logger.log('Room: ' + this.room.name + ' needs harvester');
 
     var harvesterAttributes = creepHarvester.attributeForEnergy(this.room.energyAvailable);
     this.createCreep(harvesterAttributes, undefined, {
@@ -39,10 +39,29 @@ StructureSpawn.prototype.createHarvester = function() {
 
 StructureSpawn.prototype.createBuilder = function() {
 
-    logger.log(this.room.name + ' is needs builder');
+    logger.log('Room: ' + this.room.name + ' needs builder');
 
     var builderAttributes = creepBuilder.attributeForEnergy(this.room.energyAvailable);
     this.createCreep(builderAttributes, undefined, {
         role: 'builder'
+    });
+};
+
+StructureSpawn.prototype.createSoldier = function() {
+
+    logger.log('Room: ' + this.room.name + ' needs soldier');
+
+    var soldierAttributes = [
+        ATTACK,TOUGH,MOVE,MOVE,
+        ATTACK,TOUGH,MOVE,MOVE,
+        ATTACK,TOUGH,MOVE,MOVE,
+        ATTACK,TOUGH,MOVE,MOVE,
+        ATTACK,TOUGH,MOVE,MOVE,
+        ATTACK,TOUGH,MOVE,MOVE,
+        ATTACK,TOUGH,MOVE,MOVE,
+        ATTACK,TOUGH,MOVE,MOVE
+    ];
+    this.createCreep(soldierAttributes, undefined, {
+        role: 'soldier'
     });
 };

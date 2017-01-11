@@ -7,6 +7,7 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMiner = require('role.miner');
+var roleSoldier = require('role.soldier');
 
 var roomAllocation = require('room.allocation');
 
@@ -32,6 +33,7 @@ module.exports.loop = function () {
     var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
     var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
     var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
+    var soldiers = _.filter(Game.creeps, (creep) => creep.memory.role == 'soldier');
 
     var sourcesNeedingMinerData = roomAllocation.sourcesNeedingMiner(Game.spawns['Spawn1'].room);
 
@@ -50,6 +52,9 @@ module.exports.loop = function () {
 
     } else if(builders.length < 2) {
         Game.spawns['Spawn1'].createBuilder();
+
+    } else if(soldiers.length < 0) {
+        Game.spawns['Spawn1'].createSoldier();
     }
 
     for(var name in Game.creeps) {
@@ -62,6 +67,8 @@ module.exports.loop = function () {
             roleBuilder.run(creep, miners);
         } else if(creep.memory.role == 'miner') {
             roleMiner.run(creep);
+        } else if(creep.memory.role == 'soldier') {
+            roleSoldier.run(creep);
         }
     }
 
