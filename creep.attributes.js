@@ -1,3 +1,27 @@
+function AttributesData() {
+    this.baseAttributes = [WORK, CARRY, MOVE];
+    this.baseAttributesCost = 200;
+    this.additionalAttributes = [WORK, CARRY, MOVE];
+    this.additionalAttributesCost = 200;
+    this.maxAdditionalAttributes = 3;
+
+    this.attributesForEnergy = function (energy) {
+        var supplementaryEnergy = energy - this.baseAttributesCost;
+        var availableSupplementaryAttributes = Math.min(
+            Math.trunc(supplementaryEnergy / this.additionalAttributesCost),
+            this.maxAdditionalAttributes
+        );
+
+        var attributes = this.baseAttributes;
+
+        while(availableSupplementaryAttributes > 0) {
+            attributes = attributes.concat(this.additionalAttributes);
+            availableSupplementaryAttributes = availableSupplementaryAttributes - 1;
+        }
+        return attributes;
+    };
+}
+
 var creepAttributes = {
 
     prepareForTest: function () {
@@ -6,53 +30,63 @@ var creepAttributes = {
     },
 
     attributeForHarvesterUsingEnergy: function(energy) {
+        var attributes = new AttributesData();
+        
+        attributes.baseAttributes = [CARRY, MOVE];
+        attributes.baseAttributesCost = 100;
+        attributes.additionalAttributes = [CARRY, MOVE];
+        attributes.additionalAttributesCost = 100;
+        attributes.maxAdditionalAttributes = 3;
 
-        var baseAttributes = [CARRY, MOVE];
-        var baseAttributesCost = 100;
-
-        var additionalAttributes = [CARRY, MOVE];
-        var additionalAttributesCost = 100;
-
-        var maxAdditionalAttributes = 3;
-
-        var supplementaryEnergy = energy - baseAttributesCost;
-        var availableSupplementaryAttributes = Math.min(
-            Math.trunc(supplementaryEnergy / additionalAttributesCost),
-            maxAdditionalAttributes
-        );
-
-        var harvesterAttributes = baseAttributes;
-
-        while(availableSupplementaryAttributes > 0) {
-            harvesterAttributes = harvesterAttributes.concat(additionalAttributes);
-            availableSupplementaryAttributes = availableSupplementaryAttributes - 1;
-        }
-        return harvesterAttributes;
+        return attributes.attributesForEnergy(energy);
     },
 
     attributeForUpgraderUsingEnergy: function(energy) {
+        var attributes = new AttributesData();
 
-        var baseAttributes = [WORK, CARRY, MOVE];
-        var baseAttributesCost = 200;
+        attributes.baseAttributes = [WORK, CARRY, MOVE];
+        attributes.baseAttributesCost = 200;
+        attributes.additionalAttributes = [WORK];
+        attributes.additionalAttributesCost = 100;
+        attributes.maxAdditionalAttributes = 5;
 
-        var additionalAttributes = [WORK];
-        var additionalAttributesCost = 100;
+        return attributes.attributesForEnergy(energy);
+    },
 
-        var maxAdditionalAttributes = 5;
+    attributeForMinerUsingEnergy: function(energy) {
+        var attributes = new AttributesData();
 
-        var supplementaryEnergy = energy - baseAttributesCost;
-        var availableSupplementaryAttributes = Math.min(
-            Math.trunc(supplementaryEnergy / additionalAttributesCost),
-            maxAdditionalAttributes
-        );
+        attributes.baseAttributes = [WORK, CARRY, MOVE];
+        attributes.baseAttributesCost = 200;
+        attributes.additionalAttributes = [WORK];
+        attributes.additionalAttributesCost = 100;
+        attributes.maxAdditionalAttributes = 5;
 
-        var upgraderAttributes = baseAttributes;
+        return attributes.attributesForEnergy(energy);
+    },
 
-        while(availableSupplementaryAttributes > 0) {
-            upgraderAttributes = upgraderAttributes.concat(additionalAttributes);
-            availableSupplementaryAttributes = availableSupplementaryAttributes - 1;
-        }
-        return upgraderAttributes;
+    attributeForBuilderUsingEnergy: function(energy) {
+        var attributes = new AttributesData();
+
+        attributes.baseAttributes = [WORK, CARRY, MOVE];
+        attributes.baseAttributesCost = 200;
+        attributes.additionalAttributes = [WORK, CARRY, MOVE];
+        attributes.additionalAttributesCost = 200;
+        attributes.maxAdditionalAttributes = 4;
+
+        return attributes.attributesForEnergy(energy);
+    },
+
+    attributeForSoldierUsingEnergy: function(energy) {
+        var attributes = new AttributesData();
+
+        attributes.baseAttributes = [ATTACK,TOUGH,MOVE,MOVE];
+        attributes.baseAttributesCost = 190;
+        attributes.additionalAttributes = [ATTACK,TOUGH,MOVE,MOVE];
+        attributes.additionalAttributesCost = 190;
+        attributes.maxAdditionalAttributes = 14;
+
+        return attributes.attributesForEnergy(energy);
     }
 };
 

@@ -131,7 +131,10 @@ describe("spawn", function() {
             spawn.createSoldier();
 
             // Assert
-            // expect(receivedAttributes).toEqual([ATTACK,TOUGH,MOVE,MOVE]);
+            expect(receivedAttributes).toEqual([
+                ATTACK,TOUGH,MOVE,MOVE,
+                ATTACK,TOUGH,MOVE,MOVE
+            ]);
             expect(receivedName).toBeUndefined();
             expect(receivedMemory).toEqual({
                 role: 'soldier'
