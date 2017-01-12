@@ -127,4 +127,52 @@ describe("creepAttributes", function() {
             expect(attributes).toEqual(expectedAttributes);
         });
     });
+    describe("attributeForClaimerUsingEnergy", function() {
+        it("return at least the base arguments even if energy  equal 0", function() {
+            // Arrange
+            var energy = 0;
+            var expectedAttributes = [CLAIM,MOVE]; // 650
+
+            // Act
+            var attributes = creepAttributes.attributeForClaimerUsingEnergy(energy);
+
+            // Assert
+            expect(attributes).toEqual(expectedAttributes);
+        });
+        it("should return the base arguments plus a number of work if energy passed allows it", function() {
+            // Arrange
+            var energy = 1300;
+            var expectedAttributes = [CLAIM,MOVE,CLAIM,MOVE];
+
+            // Act
+            var attributes = creepAttributes.attributeForClaimerUsingEnergy(energy);
+
+            // Assert
+            expect(attributes).toEqual(expectedAttributes);
+        });
+    });
+    describe("attributeForPioneerUsingEnergy", function() {
+        it("return at least the base arguments even if energy  equal 0", function() {
+            // Arrange
+            var energy = 0;
+            var expectedAttributes = [WORK, CARRY, MOVE, MOVE];
+
+            // Act
+            var attributes = creepAttributes.attributeForPioneerUsingEnergy(energy);
+
+            // Assert
+            expect(attributes).toEqual(expectedAttributes);
+        });
+        it("should return the base arguments plus a number of work if energy passed allows it", function() {
+            // Arrange
+            var energy = 700;
+            var expectedAttributes = [WORK, CARRY, MOVE, MOVE,WORK, CARRY, MOVE, MOVE];
+
+            // Act
+            var attributes = creepAttributes.attributeForPioneerUsingEnergy(energy);
+
+            // Assert
+            expect(attributes).toEqual(expectedAttributes);
+        });
+    });
 });

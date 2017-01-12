@@ -141,4 +141,58 @@ describe("spawn", function() {
             });
         });
     });
+    describe("createClaimer", function() {
+        it("should create the claimer with the right attributes", function() {
+            // Arrange
+            var spawn = new Spawn();
+            spawn.room = roomMock;
+
+            var receivedAttributes = [];
+            var receivedName = "";
+            var receivedMemory = {};
+
+            spawn.createCreep = function (creepAttributes, creepName, creepMemory) {
+                receivedAttributes = creepAttributes;
+                receivedName = creepName;
+                receivedMemory = creepMemory;
+            };
+
+            // Act
+            spawn.createClaimer();
+
+            // Assert
+            expect(receivedAttributes).toEqual([CLAIM,MOVE]);
+            expect(receivedName).toBeUndefined();
+            expect(receivedMemory).toEqual({
+                role: 'claimer'
+            });
+        });
+    });
+    describe("createPioneer", function() {
+        it("should create the claimer with the right attributes", function() {
+            // Arrange
+            var spawn = new Spawn();
+            spawn.room = roomMock;
+
+            var receivedAttributes = [];
+            var receivedName = "";
+            var receivedMemory = {};
+
+            spawn.createCreep = function (creepAttributes, creepName, creepMemory) {
+                receivedAttributes = creepAttributes;
+                receivedName = creepName;
+                receivedMemory = creepMemory;
+            };
+
+            // Act
+            spawn.createPioneer();
+
+            // Assert
+            expect(receivedAttributes).toEqual([WORK, CARRY, MOVE, MOVE,WORK, CARRY, MOVE, MOVE]);
+            expect(receivedName).toBeUndefined();
+            expect(receivedMemory).toEqual({
+                role: 'pioneer'
+            });
+        });
+    });
 });

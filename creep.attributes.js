@@ -87,6 +87,30 @@ var creepAttributes = {
         attributes.maxAdditionalAttributes = 14;
 
         return attributes.attributesForEnergy(energy);
+    },
+
+    attributeForClaimerUsingEnergy: function(energy) {
+        var attributes = new AttributesData();
+
+        attributes.baseAttributes = [CLAIM,MOVE];
+        attributes.baseAttributesCost = 650;
+        attributes.additionalAttributes = [CLAIM,MOVE];
+        attributes.additionalAttributesCost = 650;
+        attributes.maxAdditionalAttributes = 1;
+
+        return attributes.attributesForEnergy(energy);
+    },
+
+    attributeForPioneerUsingEnergy: function(energy) {
+        var attributes = new AttributesData();
+
+        attributes.baseAttributes = [WORK, CARRY, MOVE, MOVE];
+        attributes.baseAttributesCost = 250;
+        attributes.additionalAttributes = [WORK, CARRY, MOVE, MOVE];
+        attributes.additionalAttributesCost = 250;
+        attributes.maxAdditionalAttributes = 3;
+
+        return attributes.attributesForEnergy(energy);
     }
 };
 

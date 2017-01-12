@@ -53,3 +53,23 @@ StructureSpawn.prototype.createSoldier = function() {
         role: 'soldier'
     });
 };
+
+StructureSpawn.prototype.createClaimer = function() {
+
+    logger.log('Room: ' + this.room.name + ' needs claimer');
+
+    var claimerAttributes = creepAttributes.attributeForClaimerUsingEnergy(this.room.energyAvailable);
+    this.createCreep(claimerAttributes, undefined, {
+        role: 'claimer'
+    });
+};
+
+StructureSpawn.prototype.createPioneer = function() {
+
+    logger.log('Room: ' + this.room.name + ' needs pioneer');
+
+    var claimerAttributes = creepAttributes.attributeForPioneerUsingEnergy(this.room.energyAvailable);
+    this.createCreep(claimerAttributes, undefined, {
+        role: 'pioneer'
+    });
+};

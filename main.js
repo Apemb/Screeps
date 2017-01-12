@@ -8,14 +8,16 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMiner = require('role.miner');
 var roleSoldier = require('role.soldier');
-
-var roomAllocation = require('room.allocation');
+var roleClaimer = require('role.claimer');
+// var rolePioneer = require('role.claimer');
+var rolePioneer = require('role.pioneer');
 
 require("utilities.prototype.logger");
 require('prototype.source');
 require('prototype.spawn');
 require('prototype.room');
 require('prototype.tower')();
+require('prototype.scheduler');
 
 module.exports.loop = function () {
 
@@ -29,33 +31,14 @@ module.exports.loop = function () {
         }
     }
 
-    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
+    var scheduler = new Scheduler();
+
+    for (let spawnName in Game.spawns) {
+        scheduler.manageSpwan(Game.spawns[spawnName]);
+    }
+
+
     var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
-    var soldiers = _.filter(Game.creeps, (creep) => creep.memory.role == 'soldier');
-
-    var sourcesNeedingMinerData = roomAllocation.sourcesNeedingMiner(Game.spawns['Spawn1'].room);
-
-    if(sourcesNeedingMinerData.length > 0) {
-        Game.spawns['Spawn1'].createMiner(sourcesNeedingMinerData[0]);
-
-    } else {
-        logger.debugLog('sourcesNeedingMiner: ' + 'None');
-    }
-
-    if(harvesters.length < 2) {
-        Game.spawns['Spawn1'].createHarvester();
-
-    } else if(upgraders.length < 2) {
-        roleUpgrader.createUpgrader('Spawn1');
-
-    } else if(builders.length < 2) {
-        Game.spawns['Spawn1'].createBuilder();
-
-    } else if(soldiers.length < 0) {
-        Game.spawns['Spawn1'].createSoldier();
-    }
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
@@ -69,6 +52,10 @@ module.exports.loop = function () {
             roleMiner.run(creep);
         } else if(creep.memory.role == 'soldier') {
             roleSoldier.run(creep);
+        } else if(creep.memory.role == 'claimer') {
+            roleClaimer.run(creep);
+        } else if(creep.memory.role == 'pioneer') {
+            rolePioneer.run(creep);
         }
     }
 
